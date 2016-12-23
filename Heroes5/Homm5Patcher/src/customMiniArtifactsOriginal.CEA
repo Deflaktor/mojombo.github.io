@@ -1,0 +1,112 @@
+label(magicDefenseAddress)
+label(end)
+label(continue)
+label(divisor)
+label(values)
+label(maxValues)
+
+00C0A340:
+magicDefenseAddress:
+
+00C0A302:
+cmp eax,05                  // if ID = magic defense
+je magicDefenseAddress      // then go to its unchanged code
+                            // otherwise execute the following custom code
+// esi is hero level at this point and eax the type of mini artifact
+mov ecx,eax
+imul esi,[ecx*4+values]     // \ Multiply hero level with constant depending on type
+mov eax,esi                 // |
+mov edx,00000000            // |
+mov esi,dword ptr[divisor]  // | and divide it with constant 1000
+idiv esi                    // /
+inc eax                     // increment by 1
+mov esi,[ecx*4+maxValues]   // \
+cmp eax,esi                 // | compare with its maxValue
+jl continue                 // | if it is smaller, continue
+mov eax,esi                 // / else set it to its maxValue
+continue:
+// cmp eax,00                  // \
+// jne end                     // | increment 1 if it is 0
+// inc eax                     // /
+// This needs to be at the end to correctly return
+end:
+pop esi
+add esp,0C
+ret
+
+00C0A40C:
+values:
+divisor:
+dd (int)1000   // Divisor
+dd (int)100    // Attack
+dd (int)90     // Shatter
+dd (int)80     // Health
+dd (int)70     // Defense
+dd (int)0      // Magic Resistance (Dummy)
+dd (int)50     // Luck
+dd (int)40     // Moral
+dd (int)30     // Speed
+dd (int)20     // Initiative
+
+00C0A3B2:
+maxValues:
+dd (int)0      // (Dummy)
+dd (int)30     // Attack
+dd (int)30     // Shatter
+dd (int)30     // Health
+dd (int)30     // Defense
+dd (int)0      // Magic Resistance (Dummy)
+dd (int)30     // Luck
+dd (int)30     // Moral
+dd (int)30     // Speed
+dd (int)30     // Initiative
+
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop

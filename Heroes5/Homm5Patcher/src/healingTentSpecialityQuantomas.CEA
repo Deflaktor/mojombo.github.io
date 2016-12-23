@@ -1,0 +1,41 @@
+label(back)
+label(inject)
+label(hp)
+label(percent)
+
+008B335E:
+jmp inject
+back:
+
+00E07388:
+inject:
+push eax
+mov ecx,[esi]
+push ecx
+fstp dword ptr [esi]
+mov ecx,[esi]
+push ecx
+mov [esi],eax
+mov ecx,[hp]
+mul ecx
+add [edi],eax
+fld dword ptr [percent]
+fimul [esi]
+fimul [edi]
+fistp dword ptr [esi]
+mov ecx,[esi]
+add [edi],ecx
+pop ecx
+mov [esi],ecx
+fld dword ptr [esi]
+pop ecx
+mov [esi],ecx
+pop eax
+jmp back
+
+percent:
+dd (float)0.02
+
+hp:
+dd (int)0
+

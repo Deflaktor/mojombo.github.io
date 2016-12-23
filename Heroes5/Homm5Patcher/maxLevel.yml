@@ -1,0 +1,533 @@
+# ----------------------------------------------------
+# ----------------- Max Level 50 v0.92 ---------------
+# ----------------------------------------------------
+# Increases Level Cap to level 50
+#
+# The game calculates the experience table only once and caches it into memory.
+# The location the experience table is normally stored in does not have enough space 
+# to accomodate more levels. This patch relocates the cached space to a place where 
+# there is more room and as such adds support for additional levels.
+#
+# Theoretically you can set the level cap up to level 127. However then you will need to
+# bypass the map restriction level, as in the map editor you can only go as high as level 50.
+# Also the experience table needs to be adjusted, since the maximum amount of needed exp for
+# a level is 2.147.483.647. If the hero reaches a level where the experience needed for the next
+# level is more than that, he will automatically be transformed to max level. 
+#
+# -----------Things that you may want to modify ----------------
+definitions: 
+ - &level_cap 50
+# -----------Things that should not be modified ----------------
+ - &original_level_cap                 40
+# --- definitions for original exe ----
+ - &new_memory_location_original_level_0        1027600
+ - &new_memory_location_original_level_1        1027604
+ - &new_memory_location_original_level_2        1027608
+ - &new_memory_location_original_level_3        102760C
+ - &new_memory_location_original_level_4        1027610
+ - &new_memory_location_original_level_5        1027614
+ - &new_memory_location_original_level_6        1027618
+ - &new_memory_location_original_level_7        102761C
+ - &new_memory_location_original_level_8        1027620
+ - &new_memory_location_original_level_9        1027624
+ - &new_memory_location_original_level_10       1027628
+ - &new_memory_location_original_level_11       102762C
+ - &new_memory_location_original_level_12       1027630
+ - &new_memory_location_original_level_13       1027634
+ - &new_memory_location_original_level_25       1027664
+ - &original_memory_location_original_level_0   1026D90
+ - &original_memory_location_original_level_1   1026D94
+ - &original_memory_location_original_level_2   1026D98
+ - &original_memory_location_original_level_3   1026D9C
+ - &original_memory_location_original_level_4   1026DA0
+ - &original_memory_location_original_level_5   1026DA4
+ - &original_memory_location_original_level_6   1026DA8
+ - &original_memory_location_original_level_7   1026DAC
+ - &original_memory_location_original_level_8   1026DB0
+ - &original_memory_location_original_level_9   1026DB4
+ - &original_memory_location_original_level_10  1026DB8
+ - &original_memory_location_original_level_11  1026DBC
+ - &original_memory_location_original_level_12  1026DC0
+ - &original_memory_location_original_level_13  1026DC4
+ - &original_memory_location_original_level_25  1026DF4
+ # --- definitions for original quantomas exe ----- 
+ - &new_memory_location_quantomas_level_0       1010000
+ - &new_memory_location_quantomas_level_1       1010004
+ - &new_memory_location_quantomas_level_2       1010008
+ - &new_memory_location_quantomas_level_3       101000C
+ - &new_memory_location_quantomas_level_4       1010010
+ - &new_memory_location_quantomas_level_5       1010014
+ - &new_memory_location_quantomas_level_6       1010018
+ - &new_memory_location_quantomas_level_7       101001C
+ - &new_memory_location_quantomas_level_8       1010020
+ - &new_memory_location_quantomas_level_9       1010024
+ - &new_memory_location_quantomas_level_10      1010028
+ - &new_memory_location_quantomas_level_11      101002C
+ - &new_memory_location_quantomas_level_12      1010030
+ - &new_memory_location_quantomas_level_13      1010034
+ - &new_memory_location_quantomas_level_25      1010064
+ - &original_memory_location_quantomas_level_0   FF0778
+ - &original_memory_location_quantomas_level_1   FF077C
+ - &original_memory_location_quantomas_level_2   FF0780
+ - &original_memory_location_quantomas_level_3   FF0784
+ - &original_memory_location_quantomas_level_4   FF0788
+ - &original_memory_location_quantomas_level_5   FF078C
+ - &original_memory_location_quantomas_level_6   FF0790
+ - &original_memory_location_quantomas_level_7   FF0794
+ - &original_memory_location_quantomas_level_8   FF0798
+ - &original_memory_location_quantomas_level_9   FF079C
+ - &original_memory_location_quantomas_level_10  FF07A0
+ - &original_memory_location_quantomas_level_11  FF07A4
+ - &original_memory_location_quantomas_level_12  FF07A8
+ - &original_memory_location_quantomas_level_13  FF07AC
+ - &original_memory_location_quantomas_level_25  FF07DC
+--- # ----------- ORIGINAL EXE 3.1 PATCH DATA --------------------
+ # default map max restriction level
+ group: Original
+ checkAddress:   596EBA
+ checkBytes:     C7 86 30 01 00 00
+ patchAddress:   596EC0
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentLevel >= maxLevel? -> exp := maxExp
+ group: Original
+ checkAddress:   74BBFF
+ checkBytes:     83 FE
+ patchAddress:   74BC01
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentLevel >= maxLevel? -> exp := maxExp
+ group: Original
+ checkAddress:   74BC24
+ checkBytes:     83 F9
+ patchAddress:   74BC26
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # heroLevel > maxLevel?
+ group: Original
+ checkAddress:   5A9D71
+ checkBytes:     83 F8
+ patchAddress:   5A9D73
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # heroLevel := maxLevel
+ group: Original
+ checkAddress:   5A9D76
+ checkBytes:     B8
+ patchAddress:   5A9D77
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # unknown method: heroLevel right before reaching max level? heroLevel > maxLevel?
+ group: Original
+ checkAddress:   74BC54
+ checkBytes:     83 F9
+ patchAddress:   74BC56
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # unknown method: heroLevel := maxLevel
+ group: Original
+ checkAddress:   74BC59
+ checkBytes:     B8
+ patchAddress:   74BC5A
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentMapMaxLevel > maxLevel?
+ group: Original
+ checkAddress:   58BA84
+ checkBytes:     83 F8
+ patchAddress:   58BA86
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentMapMaxLevel := maxLevel
+ group: Original
+ checkAddress:   58BA89
+ checkBytes:     B8
+ patchAddress:   58BA8A
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # Level 0
+ group: Original
+ checkAddress:   74BACB
+ checkBytes:     A3
+ patchAddress:   74BACC
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_0
+ patchValue:     *new_memory_location_original_level_0
+---
+ # Level 2
+ group: Original
+ checkAddress:   74BAD5
+ checkBytes:     A3
+ patchAddress:   74BAD6
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_2
+ patchValue:     *new_memory_location_original_level_2
+---
+ # Level 1
+ group: Original
+ checkAddress:   74BADF
+ checkBytes:     89 15
+ patchAddress:   74BAE1
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_1
+ patchValue:     *new_memory_location_original_level_1
+---
+ # Level 4
+ group: Original
+ checkAddress:   74BAEB
+ checkBytes:     A3
+ patchAddress:   74BAEC
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_4
+ patchValue:     *new_memory_location_original_level_4
+---
+ # Level 3
+ group: Original
+ checkAddress:   74BAF5
+ checkBytes:     89 15
+ patchAddress:   74BAF7
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_3
+ patchValue:     *new_memory_location_original_level_3
+---
+ # Level 6
+ group: Original
+ checkAddress:   74BB01
+ checkBytes:     A3
+ patchAddress:   74BB02
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_6
+ patchValue:     *new_memory_location_original_level_6
+---
+ # Level 5
+ group: Original
+ checkAddress:   74BB0B
+ checkBytes:     89 15
+ patchAddress:   74BB0D
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_5
+ patchValue:     *new_memory_location_original_level_5
+---
+ # Level 8
+ group: Original
+ checkAddress:   74BB17
+ checkBytes:     A3
+ patchAddress:   74BB18
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_8
+ patchValue:     *new_memory_location_original_level_8
+---
+ # Level 7
+ group: Original
+ checkAddress:   74BB21
+ checkBytes:     89 15
+ patchAddress:   74BB23
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_7
+ patchValue:     *new_memory_location_original_level_7
+---
+ # Level 10
+ group: Original
+ checkAddress:   74BB2D
+ checkBytes:     A3
+ patchAddress:   74BB2E
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_10
+ patchValue:     *new_memory_location_original_level_10
+---
+ # Level 9
+ group: Original
+ checkAddress:   74BB3E
+ checkBytes:     89 15
+ patchAddress:   74BB40
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_9
+ patchValue:     *new_memory_location_original_level_9
+---
+ # Level 12
+ group: Original
+ checkAddress:   74BB44
+ checkBytes:     A3
+ patchAddress:   74BB45
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_12
+ patchValue:     *new_memory_location_original_level_12
+---
+ # Level 11
+ group: Original
+ checkAddress:   74BB4D
+ checkBytes:     89 35
+ patchAddress:   74BB4F
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_11
+ patchValue:     *new_memory_location_original_level_11
+---
+ # Level 13
+ group: Original
+ checkAddress:   74BB57
+ checkBytes:     BE
+ patchAddress:   74BB58
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_13
+ patchValue:     *new_memory_location_original_level_13
+---
+ # Level 25
+ group: Original
+ checkAddress:   74BBA3
+ checkBytes:     81 FE
+ patchAddress:   74BBA5
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_25
+ patchValue:     *new_memory_location_original_level_25
+---
+ # Experience Table Start Index 1
+ group: Original
+ checkAddress:   74BBF5
+ checkBytes:     89 04 B5
+ patchAddress:   74BBF8
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_0
+ patchValue:     *new_memory_location_original_level_0
+---
+ # Experience Table Start Index 2
+ group: Original
+ checkAddress:   74BC2E
+ checkBytes:     8B 04 8D
+ patchAddress:   74BC31
+ valueType:      Address
+ originalValue:  *original_memory_location_original_level_0
+ patchValue:     *new_memory_location_original_level_0
+--- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
+ # default map max restriction level
+ group: Quantomas3.1j
+ checkAddress:   49F07A
+ checkBytes:     C7 86 30 01 00 00
+ patchAddress:   49F080
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentLevel >= maxLevel? -> exp := maxExp
+ group: Quantomas3.1j
+ checkAddress:   5F772F
+ checkBytes:     83 FE
+ patchAddress:   5F7731
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentLevel >= maxLevel? -> exp := maxExp
+ group: Quantomas3.1j
+ checkAddress:   5F7754
+ checkBytes:     83 F9
+ patchAddress:   5F7756
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # unknown method: heroLevel right before reaching max level? heroLevel > maxLevel?
+ group: Quantomas3.1j
+ checkAddress:   48ED11
+ checkBytes:     83 F8
+ patchAddress:   48ED13
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # unknown method: heroLevel := maxLevel
+ group: Quantomas3.1j
+ checkAddress:   48ED16
+ checkBytes:     B8
+ patchAddress:   48ED17
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentMapMaxLevel > maxLevel?
+ group: Quantomas3.1j
+ checkAddress:   493774
+ checkBytes:     83 F8
+ patchAddress:   493776
+ valueType:      Byte
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # currentMapMaxLevel := maxLevel
+ group: Quantomas3.1j
+ checkAddress:   493779
+ checkBytes:     B8
+ patchAddress:   49377A
+ valueType:      Integer
+ originalValue:  *original_level_cap
+ patchValue:     *level_cap
+---
+ # Level 0
+ group: Quantomas3.1j
+ checkAddress:   5F75FB
+ checkBytes:     A3
+ patchAddress:   5F75FC
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_0
+ patchValue:     *new_memory_location_quantomas_level_0
+---
+ # Level 2
+ group: Quantomas3.1j
+ checkAddress:   5F7605
+ checkBytes:     A3
+ patchAddress:   5F7606
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_2
+ patchValue:     *new_memory_location_quantomas_level_2
+---
+ # Level 1
+ group: Quantomas3.1j
+ checkAddress:   5F760F
+ checkBytes:     89 15
+ patchAddress:   5F7611
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_1
+ patchValue:     *new_memory_location_quantomas_level_1
+---
+ # Level 4
+ group: Quantomas3.1j
+ checkAddress:   5F761B
+ checkBytes:     A3
+ patchAddress:   5F761C
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_4
+ patchValue:     *new_memory_location_quantomas_level_4
+---
+ # Level 3
+ group: Quantomas3.1j
+ checkAddress:   5F7625
+ checkBytes:     89 15
+ patchAddress:   5F7627
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_3
+ patchValue:     *new_memory_location_quantomas_level_3
+---
+ # Level 6
+ group: Quantomas3.1j
+ checkAddress:   5F7631
+ checkBytes:     A3
+ patchAddress:   5F7632
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_6
+ patchValue:     *new_memory_location_quantomas_level_6
+---
+ # Level 5
+ group: Quantomas3.1j
+ checkAddress:   5F763B
+ checkBytes:     89 15
+ patchAddress:   5F763D
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_5
+ patchValue:     *new_memory_location_quantomas_level_5
+---
+ # Level 8
+ group: Quantomas3.1j
+ checkAddress:   5F7647
+ checkBytes:     A3
+ patchAddress:   5F7648
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_8
+ patchValue:     *new_memory_location_quantomas_level_8
+---
+ # Level 7
+ group: Quantomas3.1j
+ checkAddress:   5F7651
+ checkBytes:     89 15
+ patchAddress:   5F7653
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_7
+ patchValue:     *new_memory_location_quantomas_level_7
+---
+ # Level 10
+ group: Quantomas3.1j
+ checkAddress:   5F765D
+ checkBytes:     A3
+ patchAddress:   5F765E
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_10
+ patchValue:     *new_memory_location_quantomas_level_10
+---
+ # Level 9
+ group: Quantomas3.1j
+ checkAddress:   5F766E
+ checkBytes:     89 15
+ patchAddress:   5F7670
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_9
+ patchValue:     *new_memory_location_quantomas_level_9
+---
+ # Level 12
+ group: Quantomas3.1j
+ checkAddress:   5F7674
+ checkBytes:     A3
+ patchAddress:   5F7675
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_12
+ patchValue:     *new_memory_location_quantomas_level_12
+---
+ # Level 11
+ group: Quantomas3.1j
+ checkAddress:   5F767D
+ checkBytes:     89 35
+ patchAddress:   5F767F
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_11
+ patchValue:     *new_memory_location_quantomas_level_11
+---
+ # Level 13
+ group: Quantomas3.1j
+ checkAddress:   5F7687
+ checkBytes:     BE
+ patchAddress:   5F7688
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_13
+ patchValue:     *new_memory_location_quantomas_level_13
+---
+ # Level 25
+ group: Quantomas3.1j
+ checkAddress:   5F76D3
+ checkBytes:     81 FE
+ patchAddress:   5F76D5
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_25
+ patchValue:     *new_memory_location_quantomas_level_25
+---
+ # Experience Table Start Index 1
+ group: Quantomas3.1j
+ checkAddress:   5F7725
+ checkBytes:     89 04 B5
+ patchAddress:   5F7728
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_0
+ patchValue:     *new_memory_location_quantomas_level_0
+---
+ # Experience Table Start Index 2
+ group: Quantomas3.1j
+ checkAddress:   5F775E
+ checkBytes:     8B 04 8D
+ patchAddress:   5F7761
+ valueType:      Address
+ originalValue:  *original_memory_location_quantomas_level_0
+ patchValue:     *new_memory_location_quantomas_level_0

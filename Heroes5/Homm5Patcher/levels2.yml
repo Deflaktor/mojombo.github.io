@@ -1,0 +1,326 @@
+# ----------------------------------------------------
+# ------------------ Faster Levels v1.4 --------------
+# ----------------------------------------------------
+# Experience curve makes more sense now. Supports Max Level Cap set up to level 60. 
+#
+# Changes the way the needed experience for the next
+# level is computed. 
+#
+# Normally this is the formula used for computing the needed XP:
+# Level 1-9: Need 200 more XP
+# Level 9-12: Need 300 more XP
+# Level 12-25: Need 20% more XP
+# Starting Level 26: For every level need additional 10% more XP
+# Level 40 needs 170% XP more than level 39
+#
+# This patch changes it to this formula:
+# Level 1-9:            Need 200 more XP
+# Level 9-12:           Need 300 more XP
+# Level 12-25:          Needs 20% more XP
+# Level 24 -> Level 25: Needs  8.0% more XP than Level 24 -> level 25
+# Level 25 -> Level 26: Needs  8.8% more XP than Level 24 -> level 25
+# Level 26 -> Level 27: Needs  9.6% more XP than Level 25 -> level 26
+# Level 27 -> Level 28: Needs 10.4% more XP than Level 26 -> level 27
+# Level 28 -> Level 29: Needs 11.2% more XP than Level 27 -> level 28
+# Level 29 -> Level 30: Needs 12.0% more XP than Level 28 -> level 29
+# Level 30 -> Level 31: Needs 12.8% more XP than Level 29 -> level 30
+# Level 31 -> Level 32: Needs 13.6% more XP than Level 30 -> level 31
+# Level 32 -> Level 33: Needs 14.4% more XP than Level 31 -> level 32
+# Level 33 -> Level 34: Needs 15.2% more XP than Level 32 -> level 33
+#     ...
+# Level 39 -> Level 40: Needs 12.0% more XP than Level 38 -> level 39
+#     ...
+# Level 49 -> Level 50: Needs 28.0% more XP than Level 48 -> level 49
+# 
+# The internal calculation of the experience needed is as follows:
+#  L_xp(i) = 1.20 * (L_xp(i-1) - L_xp(i-2)) + L_xp(i-1)              for 12<i<=24 
+#  L_xp(i) = (i-13) * 0.10 * (L_xp(i-1) - L_xp(i-2)) + L_xp(i-1)     for i>24
+#
+# This patch changes the latter part to the following calculation:
+#  L_xp(i) = (i+110) * 0.008 * (L_xp(i-1) - L_xp(i-2)) + L_xp(i-1)   for i>24
+#
+# A calculator can be found here:
+# https://dl.dropboxusercontent.com/u/30806408/Heroes5/Homm5Patcher/expMods/calculator.xhtml
+# 
+# -------------- Things you may want to modify -----------------
+definitions: 
+  - &level_2_exp                        1000
+  - &level_3_exp                        2000
+  - &level_4_exp                        3200
+  - &level_5_exp                        4600
+  - &level_6_exp                        6200
+  - &level_7_exp                        8000
+  - &level_8_exp                       10000
+  - &level_9_exp                       12200
+  - &level_10_exp                      14700
+  - &level_11_exp                      17500
+  - &level_12_exp                      20600
+  - &fixed_coefficient                  1.20  # each new level needs 20% more exp than the level before (between level 13 and level 24)
+  - &growth_coefficient                0.008  #\ the formula is   
+  - &level_modifier                      110  #/   exp_coefficient = (level + level_modifier) * growth_coefficient
+
+# the original game uses 0.10 for growth_coefficient and -13 for level_modifier which results in 
+#    exp_coefficient = (25-13)*0.10 = 1.20 for level 25 and 1.30 for level 26 and so on
+
+# -----------Things that should not be modified ----------------
+
+  - &original_exp_level_2                   1000
+  - &original_exp_level_3                   2000
+  - &original_exp_level_4                   3200
+  - &original_exp_level_5                   4600
+  - &original_exp_level_6                   6200
+  - &original_exp_level_7                   8000
+  - &original_exp_level_8                  10000
+  - &original_exp_level_9                  12200
+  - &original_exp_level_10                 14700
+  - &original_exp_level_11                 17500
+  - &original_exp_level_12                 20600
+  - &original_level_modifier                 -13  
+
+--- # ----------- ORIGINAL EXE 3.1 PATCH DATA --------------------
+ # Level 2
+ group: Original
+ checkAddress:   00B72DE0
+ checkBytes:     00 00 00 00 00 00 00 00 E8 03 00 00
+ patchAddress:   00B72DE8
+ valueType:      Integer
+ originalValue:  *original_exp_level_2
+ patchValue:     *level_2_exp
+---
+ # Level 3
+ group: Original
+ patchAddress:   00B72DEC
+ valueType:      Integer
+ originalValue:  *original_exp_level_3
+ patchValue:     *level_3_exp
+---
+ # Level 4
+ group: Original
+ patchAddress:   00B72DF0
+ valueType:      Integer
+ originalValue:  *original_exp_level_4
+ patchValue:     *level_4_exp
+---
+ # Level 5
+ group: Original
+ patchAddress:   00B72DF4
+ valueType:      Integer
+ originalValue:  *original_exp_level_5
+ patchValue:     *level_5_exp
+---
+ # Level 6
+ group: Original
+ patchAddress:   00B72DF8
+ valueType:      Integer
+ originalValue:  *original_exp_level_6
+ patchValue:     *level_6_exp
+---
+ # Level 7
+ group: Original
+ patchAddress:   00B72DFC
+ valueType:      Integer
+ originalValue:  *original_exp_level_7
+ patchValue:     *level_7_exp
+---
+ # Level 8
+ group: Original
+ patchAddress:   00B72E00
+ valueType:      Integer
+ originalValue:  *original_exp_level_8
+ patchValue:     *level_8_exp
+---
+ # Level 9
+ group: Original
+ patchAddress:   00B72E04
+ valueType:      Integer
+ originalValue:  *original_exp_level_9
+ patchValue:     *level_9_exp
+---
+ # Level 10
+ group: Original
+ patchAddress:   00B72E08
+ valueType:      Integer
+ originalValue:  *original_exp_level_10
+ patchValue:     *level_10_exp
+---
+ # Level 11
+ group: Original
+ patchAddress:   00B72E0C
+ valueType:      Integer
+ originalValue:  *original_exp_level_11
+ patchValue:     *level_11_exp
+---
+ # Level 12
+ group: Original
+ patchAddress:   00B72E10
+ valueType:      Integer
+ originalValue:  *original_exp_level_12
+ patchValue:     *level_12_exp
+---
+ # 1.20x exp coefficient starting level 12
+ group: Original
+ patchAddress:   0000031C
+ originalBytes:  00 00 00 00        # empty space
+ valueType:      Float
+ patchValue:     *fixed_coefficient
+---
+ # 0.10x exp growth coefficient starting level 25
+ group: Original
+ checkAddress:   0000030C
+ checkBytes:     00 60 D3 00 00 2C 0A 00 00 90 BD 00 00 00 00 00
+ patchAddress:   00000318
+ originalBytes:  00 00 00 00        # empty space
+ valueType:      Float
+ patchValue:     *growth_coefficient
+---
+ # change index from (i-13) to (i-1)
+ group: Original
+ checkAddress:   0074BBB0
+ checkBytes:     8D 46
+ patchAddress:   0074BBB2
+ valueType:      Byte
+ originalValue:  *original_level_modifier        # Change from lea eax,[esi-0D]  (i-13)
+ patchValue:     *level_modifier                 # To lea eax,[esi-01]           (i-1)
+---
+ # change pointer to own coefficient starting level 12
+ group: Original
+ checkAddress:   0074BB6D
+ checkBytes:     D8 0D
+ patchAddress:   0074BB6F
+ valueType:      Address
+ originalValue:  E12F1C             # pointer to float value 1.20 (fmul dword ptr [00E12F1C])
+ patchValue:     40031C             # pointer to own float value  (fmul dword ptr [0040031C]) 
+---
+ # change pointer to own coefficient starting level 25 
+ group: Original
+ checkAddress:   0074BBCB
+ checkBytes:     D8 0D
+ patchAddress:   0074BBCD
+ valueType:      Address
+ originalValue:  E12F10             # Change from fmul dword ptr [00E12F10] (original pointer)
+ patchValue:     400318             # To fmul dword ptr [00400318] (pointer to the above float value)
+
+--- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
+
+ # Level 2
+ group: Quantomas3.1j
+ checkAddress:   00B70C18
+ checkBytes:     00 00 00 00 00 00 00 00 E8 03 00 00
+ patchAddress:   00B70C20
+ valueType:      Integer
+ originalValue:  *original_exp_level_2
+ patchValue:     *level_2_exp
+---
+ # Level 3
+ group: Quantomas3.1j
+ patchAddress:   00B70C24
+ valueType:      Integer
+ originalValue:  *original_exp_level_3
+ patchValue:     *level_3_exp
+---
+ # Level 4
+ group: Quantomas3.1j
+ patchAddress:   00B70C28
+ valueType:      Integer
+ originalValue:  *original_exp_level_4
+ patchValue:     *level_4_exp
+---
+ # Level 5
+ group: Quantomas3.1j
+ patchAddress:   00B70C2C
+ valueType:      Integer
+ originalValue:  *original_exp_level_5
+ patchValue:     *level_5_exp
+---
+ # Level 6
+ group: Quantomas3.1j
+ patchAddress:   00B70C30
+ valueType:      Integer
+ originalValue:  *original_exp_level_6
+ patchValue:     *level_6_exp
+---
+ # Level 7
+ group: Quantomas3.1j
+ patchAddress:   00B70C34
+ valueType:      Integer
+ originalValue:  *original_exp_level_7
+ patchValue:     *level_7_exp
+---
+ # Level 8
+ group: Quantomas3.1j
+ patchAddress:   00B70C38
+ valueType:      Integer
+ originalValue:  *original_exp_level_8
+ patchValue:     *level_8_exp
+---
+ # Level 9
+ group: Quantomas3.1j
+ patchAddress:   00B70C3C
+ valueType:      Integer
+ originalValue:  *original_exp_level_9
+ patchValue:     *level_9_exp
+---
+ # Level 10
+ group: Quantomas3.1j
+ patchAddress:   00B70C40
+ valueType:      Integer
+ originalValue:  *original_exp_level_10
+ patchValue:     *level_10_exp
+---
+ # Level 11
+ group: Quantomas3.1j
+ patchAddress:   00B70C44
+ valueType:      Integer
+ originalValue:  *original_exp_level_11
+ patchValue:     *level_11_exp
+---
+ # Level 12
+ group: Quantomas3.1j
+ patchAddress:   00B70C48
+ valueType:      Integer
+ originalValue:  *original_exp_level_12
+ patchValue:     *level_12_exp
+---
+ # 1.20x exp coefficient starting level 12
+ group: Quantomas3.1j
+ patchAddress:   0000031C
+ originalBytes:  00 00 00 00        # empty space
+ valueType:      Float
+ patchValue:     *fixed_coefficient
+---
+ # 0.10x exp growth coefficient starting level 25
+ group: Quantomas3.1j
+ checkAddress:   00000300
+ checkBytes:     00 2C 0A 00 00 90 BD 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 42
+ patchAddress:   00000318
+ originalBytes:  00 00 00 00        # empty space
+ valueType:      Float
+ patchValue:     *growth_coefficient
+---
+ # change index from (i-13) to (i-1)
+ group: Quantomas3.1j
+ checkAddress:   005F76E0
+ checkBytes:     8D 46
+ patchAddress:   005F76E2
+ valueType:      Byte
+ originalValue:  *original_level_modifier        # Change from lea eax,[esi-0D]  (i-13)
+ patchValue:     *level_modifier                 # To lea eax,[esi-01]           (i-1)
+---
+ # change pointer to own coefficient starting level 12
+ group: Quantomas3.1j
+ checkAddress:   005F769D
+ checkBytes:     D8 0D
+ patchAddress:   005F769F
+ valueType:      Address
+ originalValue:  E98FC8                  # pointer to float value 1.20 (fmul dword ptr [00E09FC8])
+ patchValue:     40031C                  # pointer to own float value  (fmul dword ptr [0040031C]) 
+---
+ # change pointer to own coefficient starting level 25 
+ group: Quantomas3.1j
+ checkAddress:   005F76FB
+ checkBytes:     D8 0D
+ patchAddress:   005F76FD
+ valueType:      Address
+ originalValue:  E09FC0                  # Change from fmul dword ptr [00E09FC0] (original pointer)
+ patchValue:     400318                  # To fmul dword ptr [00400318] (pointer to the above float value)
+

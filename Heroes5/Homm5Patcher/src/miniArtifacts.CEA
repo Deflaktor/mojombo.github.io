@@ -1,0 +1,41 @@
+label(back)
+label(inject)
+label(masteryTable)
+label(magicDefense)
+
+00C0A340:
+magicDefense:
+
+00C0A302:
+cmp eax,05
+mov [esp+04],esi
+je magicDefense
+mov eax,esi
+mov esi,
+
+009771F0:
+jmp inject
+nop
+back:
+
+00E090FA:
+inject:
+mov eax,[esi+04]
+mov ecx,[eax+08]
+mov edx,[ecx+esi+04]
+lea ecx,[ecx+esi+04]
+call dword ptr [edx+0000023C]
+mov ecx,[esp+10]
+mov ecx,[ecx*4+masteryTable]
+mul ecx
+add [edi],eax
+mov eax,[esi+04]
+mov ecx,[eax+08]
+jmp back
+
+masteryTable:
+dd (int)0
+dd (int)4
+dd (int)6
+dd (int)10
+
