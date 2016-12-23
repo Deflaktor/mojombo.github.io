@@ -320,7 +320,7 @@ definitions:
  checkBytes:     D8 0D
  patchAddress:   005F769F
  valueType:      Address
- originalValue:  E98FC8                  # pointer to float value 1.20 (fmul dword ptr [00E09FC8])
+ originalValue:  E09FC8                  # pointer to float value 1.20 (fmul dword ptr [00E09FC8])
  patchValue:     40031C                  # pointer to own float value  (fmul dword ptr [0040031C]) 
 ---
  # change pointer to own coefficient starting level 25 
