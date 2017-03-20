@@ -19,3 +19,22 @@ td {
   white-space: normal;
   min-width: 400px;
 }
+#mouseOver {
+    text-decoration: underline;
+    text-shadow: -1px -1px gray;
+}
+#mouseOver img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: 400ms;    
+}
+#mouseOver:hover img {
+    opacity: 1;
+    transition-duration: 200ms;
+}
