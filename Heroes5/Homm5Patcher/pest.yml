@@ -1,5 +1,5 @@
 # -----------------------------------------------------
-# ---------------- PEST v1.5 --------------------------
+# ---------------- PEST v1.6 --------------------------
 # -----------------------------------------------------
 # Permanent and Endless Simultaneous Turns by Deflaktor
 # -----------------------------------------------------
@@ -21,12 +21,16 @@
 # - Palingenese
 # - SimonaK
 # - Mahnthor 
+# - dredknight
 # Thanks for additional motivation to work on it:
 # - lotihoti
 # - magnomagus
 #
 # ------------------ CHANGELOG -----------------------
 # 
+# v1.6 (24th December 2016):
+# - Fix call ship trigger for Quantomas' AI exe file
+#
 # v1.5 (30th May 2016):
 # - Fix buy ship trigger for Quantomas' AI exe file
 #
@@ -120,7 +124,6 @@ originalBytes:  74 34
 patchBytes:     EB 34       # JMP always
 
 --- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
-
 # Make algorithm return instantly
 group: Quantomas3.1j
 checkAddress:   006091BE
@@ -168,3 +171,11 @@ checkBytes:     38 58 08 5F 74 20 8B 4E 0C 8B 11 FF 52 1C 84 C0
 patchAddress:   004F26C2
 originalBytes:  74 14       # Jump if equal
 patchBytes:     EB 14       # Jump always
+---
+# Call Ship trigger
+group: Quantomas3.1j
+checkAddress:   5C98B0
+checkBytes:     8B 07 8B CF FF 50 1C 84 C0
+patchAddress:   5C98B9
+originalBytes:  74 7F       # Jump if equal
+patchBytes:     EB 7F       # Jump always

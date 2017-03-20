@@ -1,0 +1,117 @@
+# ----------------------------------------------------
+# ------------ Healing Tent HP ---------------
+# ----------------------------------------------------
+# Changes Healing amount from (10,20,50,100) to (10,40,75,200)
+#
+# By Deflaktor
+#
+# ----------------------------------------------------
+
+--- # ----------- ORIGINAL EXE 3.1 PATCH DATA ------------
+
+group: Original
+checkAddress:   00576596
+checkBytes:     03 56 57 8B F9 77 3D FF 24 85 4C 72 97 00 C7 07
+patchAddress:   005765A6        # No Mastery - healing value
+valueType:      Integer
+originalValue:  10
+patchValue:     10
+---
+group: Original
+checkAddress:   005765AA
+checkBytes:     C7 02
+patchAddress:   005765AC        # No Mastery - unknown value
+valueType:      Integer
+originalValue:  0
+patchValue:     0
+---
+group: Original
+patchAddress:   005765B4        # Basic Mastery - healing value
+valueType:      Integer
+originalValue:  20
+patchValue:     40
+---
+group: Original
+patchAddress:   005765BA        # Basic Mastery - unknown value
+valueType:      Integer
+originalValue:  0
+patchValue:     0
+---
+group: Original
+patchAddress:   005765C2        # Advanced Mastery - healing value
+valueType:      Integer
+originalValue:  50
+patchValue:     75
+---
+group: Original
+patchAddress:   005765C8        # Advanced Mastery - unknown value
+valueType:      Integer
+originalValue:  1
+patchValue:     1
+---
+group: Original
+patchAddress:   005765D0        # Expert Mastery - healing value
+valueType:      Integer
+originalValue:  100
+patchValue:     200
+---
+group: Original
+patchAddress:   005765D6        # Expert Mastery - unknown value
+valueType:      Integer
+originalValue:  3
+patchValue:     3
+
+--- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
+
+group: Quantomas3.1j
+checkAddress:   004B26D6
+checkBytes:     03 56 57 8B F9 77 3D FF 24 85 8C 33 8B 00 C7 07
+patchAddress:   004B26E6        # No Mastery - healing value
+valueType:      Integer
+originalValue:  10
+patchValue:     10
+---
+group: Quantomas3.1j
+checkAddress:   004B26EA
+checkBytes:     C7 02
+patchAddress:   004B26EC        # No Mastery - unknown value
+valueType:      Integer
+originalValue:  0
+patchValue:     0
+---
+group: Quantomas3.1j
+patchAddress:   004B26F4        # Basic Mastery - healing value
+valueType:      Integer
+originalValue:  20
+patchValue:     40
+---
+group: Quantomas3.1j
+patchAddress:   004B26FA        # Basic Mastery - unknown value
+valueType:      Integer
+originalValue:  0
+patchValue:     0
+---
+group: Quantomas3.1j
+patchAddress:   004B2702        # Advanced Mastery - healing value
+valueType:      Integer
+originalValue:  50
+patchValue:     75
+---
+group: Quantomas3.1j
+patchAddress:   004B2708        # Advanced Mastery - unknown value
+valueType:      Integer
+originalValue:  1
+patchValue:     1
+---
+group: Quantomas3.1j
+patchAddress:   004B2710        # Expert Mastery - healing value
+valueType:      Integer
+originalValue:  100
+patchValue:     200
+---
+group: Quantomas3.1j
+patchAddress:   004B2716        # Expert Mastery - unknown value
+valueType:      Integer
+originalValue:  3
+patchValue:     3
+

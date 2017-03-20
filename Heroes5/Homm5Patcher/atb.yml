@@ -44,7 +44,7 @@ definitions:
  patchValue:     *max_start_value_atb
 ---
  group: Original
- patchAddress:   00000320
+ patchAddress:   0000033C
  originalBytes:  00*              # empty space
  valueType:      Float
  patchValue:     *sorcery_atb
@@ -55,7 +55,7 @@ definitions:
  patchAddress:   007BECC9
  valueType:      Address
  originalValue:  E12F10           # pointer to float value 0.10 (for sorcery skill level multiplier)
- patchValue:     400320           # pointer to own float value  
+ patchValue:     40033C           # pointer to own float value  
 --- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
  group: Quantomas3.1j
  checkAddress:   0074398F
@@ -82,7 +82,7 @@ definitions:
  patchValue:     *max_start_value_atb
 ---
  group: Quantomas3.1j
- patchAddress:   00000320
+ patchAddress:   0000033C
  originalBytes:  00*              # empty space
  valueType:      Float
  patchValue:     *sorcery_atb
@@ -93,4 +93,4 @@ definitions:
  patchAddress:   007439E9
  valueType:      Address
  originalValue:  E09FC0           # pointer to float value 0.10 (for sorcery skill level multiplier)
- patchValue:     400320           # pointer to own float value  
+ patchValue:     40033C           # pointer to own float value  
