@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+    <title>Heroes 5 Experience Table Calculator</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	<script src="jquery-linedtextarea/jquery-linedtextarea.js"></script>
+	<link href="jquery-linedtextarea/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <table>
+    <tr>
+    <td><div id="graph" style="width: 100%;"></div></td>
+    <td><div id="graph2" style="width: 100%;"></div></td>
+    </tr>
+    </table>
+
+    <script src="calculator.js"></script>
+
+    <input type="checkbox" value="Logarithmic" onclick="setLogarithmic()"></input>Logarithmic Scale<br />
+
+    <textarea class="lined" name="expTable" cols="60" rows="50"></textarea><br />
+    max_level: <input type="text" value="40"></input><br />
+	<div id="afterLevel">incremental increase after level 40:</div><input type="text" value="30000000"></input><br />
+	<br />
+	plot name:<input type="text" value="custom"></input><br />
+    <input type="submit" value="Clear All Plots" onclick="clearPlot()"></input>
+    <input type="submit" value="Add Plot" onclick="addPlotByTable()"></input>
+    <input type="submit" value="Plot Original Curve" onclick="showOriginal()"></input><br />
+	<br />
+    <input type="submit" value="Get Original Curve Data (Overwrites Above Table)" onclick="getOriginalLevelsTable()"></input><br />
+	<input type="submit" value="Get Original without increasing growth efficient Curve Data (Overwrites Above Table)" onclick="getOriginalWithoutGrowthLevelsTable()"></input><br />
+	<input type="submit" value="Get Levels V2.0 Curve (Overwrites Above Table)" onclick="getLevelsV20Table()"></input><br />
+	<input type="submit" value="Get S-Shaped Curve Data (Overwrites Above Table)" onclick="getCusotmLevelsTable()"></input><br />
+	<input type="submit" value="Get LevelsByBAD Curve Data (Overwrites Above Table)" onclick="getLevelsTableByBAD()"></input><br />
+	<br />
+	<input type="submit" value="Round the experience table (Overwrites Above Table)" onclick="roundTable()"></input><br />
+	<br />
+	<br />
+	<input type="submit" value="Export to LevelsV2.0 Anchors" onclick="exportToPatch()"></input>
+	
+	<script>getOriginalLevelsTable()</script>
+	<br /><br /><textarea class="export" name="export" cols="60" rows="50"></textarea><br />
+
+<script>
+$(function() {
+	$(".lined").linedtextarea(
+		{selectedLine: 1}
+	);
+});
+</script>
+	
+</body>
+</html>
