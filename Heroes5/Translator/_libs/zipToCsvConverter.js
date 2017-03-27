@@ -14,6 +14,7 @@ var tableData = {
 var encoder = new TextEncoder("utf-16le");
 var decoder = new TextDecoder("utf-16le");
 var asyncRequestsGoingOn = 0;
+var loadFromCSVFilePath;
 
 function importOriginal(evt) {
 	importFile(evt, dataOriginal);
@@ -90,6 +91,7 @@ function loadEntries(entries, index) {
     				user.async("uint8array").then(function (data4) {
     					asyncRequestsGoingOn--;
 						createRow(index, data, data2, data3, data4, entryName)
+						$("#progress").text("To process: "+asyncRequestsGoingOn);
 					});
     			}
     			var compare = dataCompare.entries[entryName];
@@ -98,10 +100,12 @@ function loadEntries(entries, index) {
     		function compareAsync(data3) {
     			asyncRequestsGoingOn--;
     			createRow(index, data, data2, data3, [], entryName);
+    			$("#progress").text("To process: "+asyncRequestsGoingOn);
     		}
     		function userAsync(data4) {
     			asyncRequestsGoingOn--;
     			createRow(index, data, data2, [], data4, entryName);
+    			$("#progress").text("To process: "+asyncRequestsGoingOn);
     		}
 			if(data2.length == 0 || data.length > 0 && data2.length > 0 && decoder.decode(data) != decoder.decode(data2)) {
 				var compare = dataCompare.entries[entryName];
@@ -138,6 +142,21 @@ function loadEntries(entries, index) {
 	loadEntries(entries, index + 1);
 }
 
+function parseColumns() {
+	var table = $("#csvTable");
+	var csv = table.text();
+	var firstLine = csv.split('\n', 2).join('\n');
+	var rows = $.csv.toObjects(firstLine);
+	$('#exportColumn').empty();
+	var i = 0;
+	for(var column in rows[0]) {
+		if(i > 0)
+			$('#exportColumn').append('<option>'+column+'</option>')
+		i++;
+	}
+	$('#exportColumn option:last').prop('selected',true);
+}
+
 function save() {
 	var table = $("#csvTable");
 	var csv = table.text();
@@ -145,11 +164,12 @@ function save() {
 		csv = csv.substring(csv.indexOf("\n") + 1);
 	}*/
 	var rows = $.csv.toObjects(csv);
+	var column = $('#exportColumn :selected').text();
 
 	var zip = new JSZip();
 	for(var i=0;i<rows.length;i++) {
 		var row = rows[i];
-		zip.file(row.file, encoder.encode(row.user), {binary: true});
+		zip.file(row.file, encoder.encode(row[column]), {binary: true});
 	}
 	zip.generateAsync({type:"blob"})
 	.then(function(content) {
@@ -164,6 +184,24 @@ function saveAsCSV() {
 	saveAs(blob, "output.csv");
 }
 
+function loadFromCSVFile(evt) {
+	var files = evt.target.files;
+	var file = files[0];
+	loadFromCSVFilePath = file;
+}
+
+function loadFromCSV() {
+	var file = loadFromCSVFilePath;
+	var reader = new FileReader();
+	var table = $("#csvTable");
+
+    reader.onload = function(evt) {
+        table.text(evt.target.result);
+    };
+
+    reader.readAsText(file);
+}
+
 function reconstructTable() {
 	var table = $("#csvTable");
 	var rows = tableData.rows;
@@ -173,6 +211,7 @@ function reconstructTable() {
 		table.append(rows[row]);
 	}
 	table.text($.csv.fromObjects(input));
+	parseColumns();
 }
 
 function createRow(index, data, data2, data3, data4, file) {
@@ -195,10 +234,10 @@ function createRow(index, data, data2, data3, data4, file) {
 	
 	var row = {
 		file : file,
-		original : original,
-		diff : diff,
-		compare : compare,
-		user : user,
+		diff_of_source : original,
+		source_language : diff,
+		compare_language : compare,
+		target_language : user,
 	}
 
 	tableData.rows[index] = row;
@@ -216,4 +255,8 @@ function onLoadDocument() {
 	$("#save").click(save);
 	$("#saveAsCSV").click(saveAsCSV);
 	$("#load").click(loadAllFiles);
+	$("#loadFromCSV").click(loadFromCSV);
+	$("#loadFromCSVFile").on("change", loadFromCSVFile);
+	$("#csvTable").on("change keyup paste", parseColumns);
+
 }

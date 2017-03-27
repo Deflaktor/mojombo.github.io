@@ -37,7 +37,7 @@
     In the spreadsheet programm you notice that there is the french translation for DifficultyHardName.txt missing, so you correct that. Then you will just need to export from the spreedsheet back to a .csv file, open the .csv file with a text editor and copy its contents to the textarea below. Afterwards press "Export Target Language to Zip" to export the french.zip file with its data corrected.
 
 	<h3>Choose the local(s) zip file(s) containing txt files</h3>
-	<input type="submit" id="load" value="Load All Files">
+	<input type="submit" id="load" value="Load All ZIP Files">
 	<div id="progress"></div>
 
 	<table class="normal">
@@ -45,9 +45,13 @@
 		<tr><td colspan="4"><textarea id ="csvTable"></textarea></td></tr>
 	</table>
 
-	<input type="submit" id="saveAsCSV" value="Save Data Table as CSV"></input><br/>
-	<br/>
-	<input type="submit" id="save" value="Export Target Language to Zip"></input>
+	<table class="normal">
+		<tr><td><input type="submit" id="saveAsCSV" value="Save Data Table as CSV"></input></td><td><input type="file" id="loadFromCSVFile"></input><br/><input type="submit" id="loadFromCSV" value="Load Data Table from CSV"></input></td></tr>
+	</table>
+	<select id="exportColumn">
+      <option>target</option>
+    </select>
+	<input type="submit" id="save" value="Export Language to Zip"></input>
 
 	<script type="text/javascript">
 		(function () {
