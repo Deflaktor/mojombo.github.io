@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	<title>Heroes 5 Translator</title>
+	<script src="jszip.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="zipToCsvConverter.js"></script>
+	<script src="encoding.js"></script>
+	<script src="jquery.csv.js"></script>
+	<script src="FileSaver.min.js"></script>
+	<style>
+		table.normal {
+			width: 100%;
+			table-layout: fixed;
+		}
+		table tr { border-bottom:1px solid #e9e9e9; }
+		table tr td, th { border:1px solid #D5D5D5; padding:1px;}
+		table textarea:hover { background:#fcfcfc;}
+		textarea {
+			min-width : 100%;
+			min-height : 300px;
+		}
+	</style>
+</head>
+<body>
+    <p>This little tool will convert your zip files to csv files. It finds every .txt file in your zip file and converts it to a path along its text content and stores it in csv format. This helps translating texts, since you can have the text in a table. If you want to release a new verpsion of your translation, you can give the old zip file and it will output only the differences.</p><p> For example: <br/> 
+    You have a zip file containing your old version and the new version of your zip file changes only two files, namely DifficultyEasyName.txt and DifficultyHardName.txt. The old files had two typos so you corrected them. Then you can also specify the compare zip file which is just for information. In this case you specify your german.zip file and then also specifiy the target language zip file which you want to translate to. You dont have to specify the optional ones but in this case you do. So the french.zip file is also set. Loading all these 4 zip files will result in:</p>
+    <pre>
+    GameMechanics/RefTables/UIDifficultyInfo/DifficultyEasyName.txt,Eess,Easy,Einfach,Simple<br/>
+    GameMechanics/RefTables/UIDifficultyInfo/DifficultyHardName.txt,Hardd,Hard,Schwer,<br/>
+    </pre>
+    You can then press on "Save Data Table as CSV" to import it into a spreadsheet program for translation:
+    <table>
+    <tr><td>GameMechanics/RefTables/UIDifficultyInfo/DifficultyEasyName.txt</td><td>Eess</td><td>Easy</td><td>Einfach</td><td>Simple</td></tr>
+    <tr><td>GameMechanics/RefTables/UIDifficultyInfo/DifficultyHardName.txt</td><td>Hardd</td><td>Hard</td><td>Schwer</td><td></td></tr>
+    </table>
+    In the spreadsheet programm you notice that there is the french translation for DifficultyHardName.txt missing, so you correct that. Then you will just need to export from the spreedsheet back to a .csv file, open the .csv file with a text editor and copy its contents to the textarea below. Afterwards press "Export Target Language to Zip" to export the french.zip file with its data corrected.
+
+	<h3>Choose the local(s) zip file(s) containing txt files</h3>
+	<input type="submit" id="load" value="Load All Files">
+	<div id="progress"></div>
+
+	<table class="normal">
+		<tr><th><input type="file" id="original" name="file" multiple /><br/>(Optional)<br/>Old Version of Source Language for Diff</th><th><input type="file" id="diff" name="file" multiple /><br/><br/>Source Language</th><th><input type="file" id="compare" name="file" multiple /><br/>(Optional)<br/>Compare Language</th><th><input type="file" id="user" name="file" multiple /><br/><br/>Target Language</th></tr>
+		<tr><td colspan="4"><textarea id ="csvTable"></textarea></td></tr>
+	</table>
+
+	<input type="submit" id="saveAsCSV" value="Save Data Table as CSV"></input><br/>
+	<br/>
+	<input type="submit" id="save" value="Export Target Language to Zip"></input>
+
+	<script type="text/javascript">
+		(function () {
+			onLoadDocument();
+		})();
+	</script>
+
+</body>
+</html>

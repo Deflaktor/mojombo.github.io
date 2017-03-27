@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	<title>Heroes 5 Translator</title>
+	<script src="jszip.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="translator.js"></script>
+	<script src="encoding.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/autosize.js/1.18.4/jquery.autosize.min.js"></script>
+	<style>
+		table {
+			width: 100%;
+			table-layout: fixed;
+		}
+		table tr { border-bottom:1px solid #e9e9e9; }
+		table tr td, th { border:1px solid #D5D5D5; padding:1px;}
+		table textarea:hover { background:#fcfcfc;}
+		textarea {
+			min-width : 100%;
+			max-height: 300px;
+			border: none;
+			resize: none;
+			overflow: hidden;
+			-webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+			-moz-box-sizing: border-box; /* FF1+ */
+			box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+		}
+		tr td:first-child, tr th:first-child {
+			width : 150px;
+			text-align: right;
+			font-size: 80%;
+			word-wrap: break-word;
+		}
+	</style>
+</head>
+<body>
+
+	<h3>Choose the local(s) zip file(s)</h3>
+	<p class="note">Note : your browser will process the zip files, don't choose files too big !</p>
+	<input type="submit" id="load" value="Load All Files">
+	<div id="progress"></div>
+
+	<table>
+		<tr><th>File</th><th><input type="file" id="original" name="file" multiple /><br/>Old</th><th><input type="file" id="diff" name="file" multiple /><br/>New</th><th><input type="file" id="compare" name="file" multiple /><br/>Compare</th><th><input type="file" id="user" name="file" multiple /><br/><input type="submit" id="save" value="Save"></input><br/>NewLanguage</th></tr>
+		<tr id="beginOfTable"></tr>
+		<tr><td>Some Stuff</td><td><textarea>Some Stuff</textarea></td><td><textarea>Some Stuff</textarea></td><td><textarea>Some Stuff</textarea></td><td><textarea>Some Stuff</textarea></td></tr>
+		<tr><td>Some Stuff2</td><td><textarea>Some Stuff2</textarea></td><td><textarea>Some Stuff2</textarea></td><td><textarea>Some Stuff2</textarea></td><td><textarea>Some Stuff2</textarea></td></tr>
+	</table>
+
+	<script type="text/javascript">
+		(function () {
+			onLoadDocument();
+		})();
+	</script>
+
+</body>
+</html>
