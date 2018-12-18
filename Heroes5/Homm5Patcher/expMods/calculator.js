@@ -67,6 +67,12 @@ function getCusotmLevelsTable() {
 	return returnValue;
 }
 
+function easing(t, b, c, d) {
+	t /= d;
+	return -c * t*(t-2) + b;
+}
+
+
 function getLevelsV20Table() {
 	var returnValue = "";
 	maxLevel = parseInt(document.getElementsByTagName("input")[1].value);
@@ -89,6 +95,48 @@ function getLevelsV20Table() {
 	clvlCustom(50, 17500, 20600, 1.21650, 0.05, -2, 100); //  20 000 000
 	clvlCustom(65, 17500, 20600, 1.19090, 0.05, -2, 100); // 300 000 000
 		
+	for(var i=1;i<=maxLevel;i++) {
+	  returnValue += cache[i] + "\n";
+	}
+	document.getElementsByTagName("textarea")[0].value = returnValue;
+	cache = [];
+	return returnValue;
+}
+
+function getLevelsV21Table() {
+	var returnValue = "";
+	maxLevel = parseInt(document.getElementsByTagName("input")[1].value);
+	cache = [];
+	cache[1] =     0;
+	cache[2] =  1000;
+	cache[3] =  2000;
+	cache[4] =  3200;
+	cache[5] =  4600;
+	cache[6] =  6200;
+	cache[7] =  8000;
+	cache[8] = 10000;
+	cache[9] = 12200;
+	cache[10] =14700;
+	cache[11] =17500;
+	cache[12] =20600;
+	// clvlCustom(40, 17500, 20600, 1.20, 0.051833, -2.84873, 26);
+	clvlCustom(25, 17500, 20600, 1.19937, 0.05, -2, 100); //     200 000
+	clvlCustom(40, 17500, 20600, 1.19825, 0.05, -2, 100); //   3 000 000
+	clvlCustom(50, 17500, 20600, 1.21650, 0.05, -2, 100); //  20 000 000
+
+    var first = 53;
+    var last = 60;
+    var start = 1.21800;
+
+   // first = 51;
+   // last = 60;
+    //start = 1.21800;
+
+	for(var i=first;i<=last;i++) {
+	  var growthFactor = easing(i-first, start, 1-start, last-first+1);
+	  clvlCustom(i, 17500, 20600, growthFactor, 0.05, -2, 100);
+	}
+
 	for(var i=1;i<=maxLevel;i++) {
 	  returnValue += cache[i] + "\n";
 	}
