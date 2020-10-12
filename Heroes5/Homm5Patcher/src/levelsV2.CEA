@@ -1,0 +1,97 @@
+label(levelTable)
+label(return)
+label(getFromTable)
+label(loop)
+label(maxLevel)
+label(lastDefinedLevel)
+label(lastDefinedLevelExp)
+label(expIncreaseAfterLastDefinedLevel)
+
+00B4C6B0:
+mov eax,7FFFFFFF
+cmp ecx,[maxLevel]
+jg return
+cmp ecx,[lastDefinedLevel]
+jle getFromTable
+mov eax,[lastDefinedLevelExp]
+mov edx,[lastDefinedLevel]
+
+loop:
+add eax,[expIncreaseAfterLastDefinedLevel]
+inc edx
+cmp edx,ecx
+jl loop
+
+return:
+ret
+
+getFromTable:
+mov eax,[ecx*4+levelTable]
+ret
+
+maxLevel:
+dd (int)50
+
+lastDefinedLevel:
+dd (int)40
+
+lastDefinedLevelExp:
+dd (int)77000000
+
+expIncreaseAfterLastDefinedLevel:
+dd (int)30000000
+
+levelTable:
+dd (int)0
+dd (int)0
+dd (int)1000
+dd (int)2000
+dd (int)3200
+dd (int)4600
+dd (int)6200
+dd (int)8000
+dd (int)10000
+dd (int)12200
+dd (int)14700
+dd (int)17500
+dd (int)20600
+dd (int)24300
+dd (int)28800
+dd (int)34100
+dd (int)40600
+dd (int)48300
+dd (int)57500
+dd (int)68600
+dd (int)82000
+dd (int)98000
+dd (int)117000
+dd (int)140000
+dd (int)168000
+dd (int)201000
+dd (int)244000
+dd (int)304000
+dd (int)395000
+dd (int)540000
+dd (int)786000
+dd (int)1230000
+dd (int)2070000
+dd (int)3750000
+dd (int)6500000
+dd (int)11500000
+dd (int)19000000
+dd (int)29000000
+dd (int)42000000
+dd (int)58000000
+dd (int)77000000
+dd (int)100000000
+dd (int)123000000
+dd (int)146000000
+dd (int)170000000
+dd (int)195000000
+dd (int)220000000
+dd (int)245000000
+dd (int)270000000
+dd (int)300000000
+dd (int)330000000
+
+

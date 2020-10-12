@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8" />
+    <title>Heroes 5 Experience Table Calculator</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+
+    <table>
+    <tr>
+    <td><div id="graph" style="width: 100%;"></div></td>
+    <td><div id="graph2" style="width: 100%;"></div></td>
+    </tr>
+    </table>
+
+    <script src="calculator.js"></script>
+
+    <input type="checkbox" value="Logarithmic" onclick="setLogarithmic()"></input>Logarithmic Scale
+<pre>
+L_xp(i) = fixed_coefficient * (L_xp(i-1) - L_xp(i-2)) + L_xp(i-1)                        for 12&lt;i&lt;=24 
+L_xp(i) = (i+level_modifier) * growth_coefficient * (L_xp(i-1) - L_xp(i-2)) + L_xp(i-1)  for i&gt;24
+
+level_modifier = fixed_coefficient / growth_coefficient - 25
+growth_coefficient = fixed_coefficient / (level_modifier + 25)
+</pre>
+
+    level_11_exp: <input type="text" value="17500"></input><br />
+    level_12_exp: <input type="text" value="20600"></input><br />
+    fixed_coefficient: <input type="text" value="1.2"></input><br />
+    growth_coefficient: <input type="text" value="0.1"></input><br />
+    level_modifier: <input type="text" value="-13"></input><br />
+    max_level: <input type="text" value="50"></input><br />
+    <input type="submit" value="Clear" onclick="clearPlot()"></input>
+    <input type="submit" value="Plot" onclick="addPlot()"></input><br />
+    <br />
+    <input type="submit" value="Plot Original Curve" onclick="showOriginal()"></input>
+
+</body>
+</html>

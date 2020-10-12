@@ -1,0 +1,38 @@
+label(freeSpace)
+label(return)
+label(factor)
+label(quadraticFactor)
+
+00CD221D:
+jmp freeSpace
+return:
+pop edi
+pop esi
+add esp,0C
+ret
+int 3
+int 3
+int 3
+
+400352:
+freeSpace:
+sub esp,04
+fild dword ptr [esp+0C]    // load town level
+fidiv dword ptr [esp+10]   // divide by max town level
+fmul dword ptr [factor]    // multiply with factor
+fstp dword ptr [esp+00]    // store in temporary register
+
+fild dword ptr [esp+0C]    // load town level
+fimul dword ptr [esp+0C]   // multiply with town level
+fidiv dword ptr [esp+10]   // divide by max town level
+fidiv dword ptr [esp+10]   // divide by max town level
+fmul dword ptr [quadraticFactor]    // multiply with quadratic factor
+fadd dword ptr [esp+00]    // add temporary register
+add esp,04
+jmp return
+
+factor:
+dd (float)0.20
+
+quadraticFactor:
+dd (float)0.80

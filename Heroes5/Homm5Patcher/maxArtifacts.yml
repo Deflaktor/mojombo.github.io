@@ -1,0 +1,103 @@
+# ----------------------------------------------------
+# --------------- Max Artifacts Count 150 ------------
+# ----------------------------------------------------
+#
+# Changes the amount of available artifacts from 97 to 150
+#
+# ----------------------------------------------------
+# -------------- Things you may want to modify -----------------
+definitions: 
+- &max_artifact_count            150
+--- # --------------- ORIGINAL PATCH DATA ---------------
+group: Original
+checkAddress:   44BE7A
+checkBytes:     E8 A1 50 BB FF
+patchAddress:   44BE7F
+originalBytes:  6A 61 8D 44 24 24     # push 61 & lea eax,[esp+24]
+patchBytes:     E9 C0 38 BB FF 90     # jmp 00400344 & nop
+---
+group: Original
+patchAddress:   344
+originalBytes:  00
+patchBytes:     68                             # push
+---
+group: Original
+patchAddress:   345
+originalBytes:  00*
+valueType:      Integer
+patchValue:     *max_artifact_count
+---
+group: Original
+patchAddress:   349
+originalBytes:  00*
+patchBytes:     8D 44 24 24 E9 33 C7 44 00     # lea eax,[esp+24] & jmp 0093EDD5
+---
+group: Original
+checkAddress:   446C95
+checkBytes:     C3 CC CC CC CC CC CC CC CC CC CC B8
+patchAddress:   446CA1
+valueType:      Integer
+originalValue:  97
+patchValue:     *max_artifact_count
+--- # --------------- QUANTOMAS 3.1j PATCH DATA ---------------
+group: Quantomas3.1j
+checkAddress:   0053E1CA
+checkBytes:     E8 51 22 AC FF
+patchAddress:   0053E1CF
+originalBytes:  6A 61 8D 44 24 24     # push 61 & lea eax,[esp+24]
+patchBytes:     E9 70 15 AC FF 90     # jmp 00400344 & nop
+---
+group: Quantomas3.1j
+patchAddress:   344
+originalBytes:  00
+patchBytes:     68                             # push
+---
+group: Quantomas3.1j
+patchAddress:   345
+originalBytes:  00*
+valueType:      Integer
+patchValue:     *max_artifact_count
+---
+group: Quantomas3.1j
+patchAddress:   349
+originalBytes:  00*
+patchBytes:     8D 44 24 24 E9 83 EA 53 00     # lea eax,[esp+24] & jmp 0093EDD5
+---
+group: Quantomas3.1j
+checkAddress:   005393D5
+checkBytes:     C3 CC CC CC CC CC CC CC CC CC CC B8
+patchAddress:   005393E1
+valueType:      Integer
+originalValue:  97
+patchValue:     *max_artifact_count
+--- # --------------- MAP EDITOR EXE 3.1 PATCH DATA ---------------
+group: MapEditorOriginal
+checkAddress:   8C537A
+checkBytes:     E8 E1 CF 73 FF
+patchAddress:   8C537F
+originalBytes:  6A 61 8D 44 24 24     # push 61 & lea eax,[esp+24]
+patchBytes:     E9 C0 A3 73 FF 90     # jmp 00400344 & nop
+---
+group: MapEditorOriginal
+patchAddress:   344
+originalBytes:  00
+patchBytes:     68                             # push
+---
+group: MapEditorOriginal
+patchAddress:   345
+originalBytes:  00*
+valueType:      Integer
+patchValue:     *max_artifact_count
+---
+group: MapEditorOriginal
+patchAddress:   349
+originalBytes:  00*
+patchBytes:     8D 44 24 24 E9 33 5C 8C 00     # lea eax,[esp+24] & jmp 00CC5F85
+---
+group: MapEditorOriginal
+checkAddress:   8C05C5
+checkBytes:     C3 CC CC CC CC CC CC CC CC CC CC B8
+patchAddress:   8C05D1
+valueType:      Integer
+originalValue:  97
+patchValue:     *max_artifact_count

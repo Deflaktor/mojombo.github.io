@@ -1,0 +1,30 @@
+label(back)
+label(inject)
+label(masteryTable)
+
+008B3330:
+jmp inject
+nop
+back:
+
+00E0734A:
+inject:
+mov eax,[esi+04]
+mov ecx,[eax+08]
+mov edx,[ecx+esi+04]
+lea ecx,[ecx+esi+04]
+call dword ptr [edx+00000234]
+mov ecx,[esp+10]
+mov ecx,[ecx*4+masteryTable]
+mul ecx
+add [edi],eax
+mov eax,[esi+04]
+mov ecx,[eax+08]
+jmp back
+
+masteryTable:
+dd (int)0
+dd (int)4
+dd (int)6
+dd (int)10
+

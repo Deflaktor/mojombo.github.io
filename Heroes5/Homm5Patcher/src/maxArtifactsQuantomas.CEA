@@ -1,0 +1,17 @@
+label(code)
+label(back)
+
+0093EDCF:
+jmp code
+nop
+back:
+push eax
+
+400344:
+code:
+push 00000096
+lea eax,[esp+24]
+jmp back
+
+00939FE0:
+mov eax,00000096
