@@ -1,6 +1,5 @@
 ---
-layout: post
-title: Hello Wordl
+title: Hello World
 ---
 
 {{ page.title }}
